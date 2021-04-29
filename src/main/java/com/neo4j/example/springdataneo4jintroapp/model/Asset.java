@@ -1,6 +1,5 @@
 package com.neo4j.example.springdataneo4jintroapp.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.neo4j.ogm.annotation.GeneratedValue;
