@@ -18,7 +18,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,26 +34,30 @@ public class SpringDataNeo4jIntroAppApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-		Application app1 = new Application();
-		app1.setName("Marcus,''Chiu");
-		app1.setUuid("uuid,");
-		Application app2 = new Application();
-		app2.setTest("test");
-		app2.setId(12L);
-		app2.setUuid("something");
-		List<Application> list = Arrays.asList(app1, app2);
+		List<Application> list = new ArrayList<>();
+		for (int i = 0; i < 100000; i++) {
+			Application app1 = new Application();
+			app1.setName("Marcus,''Chiu");
+			app1.setTest("test");
+			app1.setUuid("uuid," + i);
+			list.add(app1);
+		}
 		Class clazz = Application.class;
 		Integer batchSize = 10000;
 		Boolean parallel = true;
 
-		System.out.println(genValues(clazz, list));
 		Session session = sessionFactory.openSession();
 		String query = "CALL apoc.periodic.iterate(" +
 				"\"UNWIND [" + genValues(clazz, list) + "] AS line RETURN line\"," +
 				"\"WITH apoc.map.fromLists([" + genHeaders(clazz) + "],line) AS map MERGE (n:" + genClass(clazz) + " {uuid: map.uuid}) SET n += apoc.map.clean(map,[],[''])\"," +
 				"{batchSize:" + batchSize + ", parallel:" + parallel + "})";
-		System.out.println(query);
+//		System.out.println(query);
+		System.out.println("STARTED");
+		Long start = System.currentTimeMillis();
 		session.query(query, new HashMap<>());
+		Long end = System.currentTimeMillis();
+
+		System.out.println("time: " + (end - start));
 
 		System.exit(0);
 	}
