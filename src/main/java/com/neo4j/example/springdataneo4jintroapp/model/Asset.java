@@ -14,7 +14,6 @@ public class Asset {
     @EqualsAndHashCode.Include
     @Id @GeneratedValue(strategy = UuidStrategy.class)
     private String uuid;
-    @JsonIgnore
     @Transient
     @EqualsAndHashCode.Include
     private String name;
