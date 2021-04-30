@@ -35,7 +35,7 @@ public class SpringDataNeo4jIntroAppApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 		List<Application> list = new ArrayList<>();
-		for (int i = 0; i < 100000; i++) {
+		for (int i = 0; i < 1000; i++) {
 			Application app1 = new Application();
 			app1.setName("Marcus,''Chiu");
 			app1.setTest("test");
@@ -43,7 +43,7 @@ public class SpringDataNeo4jIntroAppApplication implements CommandLineRunner {
 			list.add(app1);
 		}
 		Class clazz = Application.class;
-		Integer batchSize = 10000;
+		Integer batchSize = 100;
 		Boolean parallel = true;
 
 		Session session = sessionFactory.openSession();
@@ -51,7 +51,7 @@ public class SpringDataNeo4jIntroAppApplication implements CommandLineRunner {
 				"\"UNWIND [" + genValues(clazz, list) + "] AS line RETURN line\"," +
 				"\"WITH apoc.map.fromLists([" + genHeaders(clazz) + "],line) AS map MERGE (n:" + genClass(clazz) + " {uuid: map.uuid}) SET n += apoc.map.clean(map,[],[''])\"," +
 				"{batchSize:" + batchSize + ", parallel:" + parallel + "})";
-//		System.out.println(query);
+
 		System.out.println("STARTED");
 		Long start = System.currentTimeMillis();
 		session.query(query, new HashMap<>());
