@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.marcuschiu</groupId>
-	<artifactId>neo4j-csv-apoc-example</artifactId>
+	<artifactId>spring-boot-neo4j-apoc-bulk-list-load-example</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>neo4j-example</name>
 	<description>Demo project for Spring Data Neo4j and Spring Boot</description>
